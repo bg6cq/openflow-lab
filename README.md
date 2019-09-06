@@ -169,10 +169,79 @@ mininet> dpctl dump-flows
 mininet> exit
 ```
 
-Open Daylight虚拟机(ODL)准备
+## 五、Open Daylight虚拟机(ODL)准备
 
 在VirtualBox中导入 ubuntu.ova，虚拟机名字设置为ODL，在 MAC 地址处 选择 “为所有网卡重新生成MAC地址”，网卡设置为 与主机网卡 桥接。
 
 启动虚拟机，输入用户名/密码 apnic/apnic，登录后，使用 ping x.x.x.x 测试与mininet虚拟机网络通信正常即可(虚拟机自动DHCP获取IP地址)。
 
 在ODL虚拟机中执行命令`ip addr`，显示网卡IP地址为y.y.y.y，从PC终端执行`ssh apnic@y.y.y.y`登录虚拟机，这样做是为了方便后续 copy-paste命令。
+
+按照以下步骤安装相应的软件：
+
+```
+1. 更新:
+apnic@ubuntu:~$ sudo apt-get update
+
+2. 安装Java 运行环境：
+apnic@ubuntu:~$ sudo apt-get install default-jre-headless
+
+设置JAVA_HOME环境变量
+apnic@ubuntu:~$ vi ~/.bashrc
+
+增加如下行：
+JAVA_HOME=/usr/lib/jvm/default-java
+
+运行文件：
+apnic@ubuntu:~$ source ~/.bashrc
+```
+
+## 六、安装和配置OpenDaylight控制器软件
+
+```
+1. 下载并安装OpenDaylight:
+
+Downlight OpenDaylight Boron-SR4 (it may be easier to do a web search for ‘OpenDaylight download’ and then copy the download link from there):
+
+apnic@ubuntu:~$ wget https://nexus.opendaylight.org/content/groups/public/org/opendaylight/integration/distribution-karaf/0.5.4-BoronSR4/distribution-karaf-0.5.4-Boron-SR4.tar.gz
+
+展开压缩文件:
+apnic@ubuntu:~$ tar xvf distribution-karaf-0.5.4-BoronSR4.tar.gz
+
+A new directory distribution-karaf-0.5.4-Boron-SR4 will be created in the current directory.
+Note that Opendaylight uses Apache Karaf technology (http://karaf.apache.org/) which allows
+the entire distribution to be contained in a single folder.
+
+2. 运行 OpenDaylight:
+apnic@ubuntu:~$ cd distribution-karaf-0.5.4-Boron-SR4
+apnic@ubuntu:~$ ./bin/karaf
+The above command will take you to the OpenDaylight shell:
+```
+![ODL](img/of3.png)
+
+```
+3. 安装OpenDaylight 特性:
+
+opendaylight-user@root> feature:install odl-restconf odll2switch-switch odl-mdsal-apidocs odl-dlux-all
+
+OpenDaylight 特性需要按需启用，安装需要一些时间：
+  odl-restconf: Enables the RESTCONF northbound API
+  odl-l2switch-switch: Provides an implementation of an Ethernet learning switch
+  odl-mdsal-apidocs: Enables access to YANG API
+  odl-dlux-all: GUI for OpenDaylight
+
+Verify the installed features:
+opendaylight-user@root> feature:list --installed
+
+4. 打开 OpenDaylight GUI界面.
+
+访问 http://y.y.y.y:8181/index.html （y.y.y.y是ODL虚拟机的IP地址）能看到如下的登录界面，使用admin/admin登录。
+```
+![ODL](img/of4.png)
+
+```
+5. 如果要退出ODL，可以使用如下命令：
+opendaylight-user@root> system:shutdown
+```
+
+
