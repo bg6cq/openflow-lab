@@ -1,10 +1,10 @@
-## openflow 实验
+## OpenFlow 实验
 
 本实验来自 https://wiki.apnictraining.net/apnic48-sdn ，感谢 Paresh Khatri 和 Warren Finch 详尽的讲解。
 
-openflow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。
+OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。
 
-控制器下发flow table规则到open flow交换机，open flow交换机依据规则实现数据包的转发过程。
+控制器下发flow table规则到OpenFlow交换机，OpenFlow交换机依据规则实现数据包的转发过程。
 
 实验包含3 部分内容，运行在2个虚拟机内：
 
@@ -12,7 +12,7 @@ openflow的思路是把data plan（处理数据包转发，由openflow交换机�
 
 2. Open Daylight 控制器，运行在一个虚拟机(名字为ODL)内，提供 openflow 控制器功能
 
-3. OpenDaylight-Openflow-App (OFM) 软件，与Open Daylight 控制器运行在同一个虚拟机ODL中，提供openflow 规则的查看等更加人性化功能
+3. OpenDaylight-Openflow-App (OFM) 软件，与Open Daylight 控制器运行在同一个虚拟机ODL中，提供OpenFlow 规则的查看等更加人性化功能
 
 如果仅仅为了尝试实验，最简单方法是登录 https://academy.apnic.net，在 Virtual Labs 中选择 OpenFlow Lab 即可。
 
@@ -71,7 +71,7 @@ completed in 2.700 seconds
 
 ## 三、实验1: 简单的网络拓扑生成
 
-在以上二的基础上，进行如下的简单实验：
+在以上二的基础上，模拟生成如下的简单网络拓扑：
 
 ![OpenFlow1](img/of1.png)
 
@@ -96,6 +96,8 @@ mininet> net
 mininet> dump
 
 3. 主机间进行ping测试
+mininet> pingll
+或者
 mininet> h1 ping h2
 mininet> h2 ping h1
 
@@ -111,6 +113,61 @@ mininet> exit
 ```
 
 
+## 四、实验2: 简单的网络拓扑，并使用默认的OpenFlow控制器
+
+在以上三的基础上，增加默认的OpenFlow控制器，模拟生成如下的简单网络拓扑：
+
+![OpenFlow1](img/of2.png)
+
+```
+1. 创建一个简单的网络拓扑，使用默认的OpenFlow控制器
+
+mininet@mininet-vm:~$ sudo mn --mac
+
+以上命令产生了包含如下内容的模拟网络：
+  1 个 交换机, s1
+  2 个 主机, h1 and h2
+  h1 eth0 连接到 s1 eth0
+  h2 eth0 连接到 s1 eth1
+  使用默认的OpenFlow控制器
+ 
+运行以上命令后，提示符是：
+mininet>
+
+2. 执行如下命令了解模拟网络状态：
+mininet> nodes
+mininet> net
+mininet> dump
+
+3. 查看flow table
+mininet> dpctl dump-flows
+
+4. 主机间进行ping测试
+mininet> pingll
+或者
+mininet> h1 ping h2
+mininet> h2 ping h1
+
+5. 查看flow table
+mininet> dpctl dump-flows
+
+6. 等一段时间，flow因超时被删除，以下命令输出为空
+mininet> dpctl dump-flows
+
+7. 显示OpenFlow交换机和控制器间的通信
+mininet> dpctl snoop &
+
+8. h1 ping h2
+mininet> h1 ping h2
+
+9. 查看flow table
+mininet> dpctl dump-flows
+
+可以重复以上过程，查看流表的变化过程
+
+10. 退出
+mininet> exit
+```
 
 Open Daylight虚拟机(ODL)准备
 
