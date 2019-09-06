@@ -14,7 +14,7 @@ OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机�
 
 3. OpenDaylight-Openflow-App (OFM) 软件，与Open Daylight 控制器运行在同一个虚拟机ODL中，提供OpenFlow 规则的查看等更加人性化功能
 
-如果仅仅为了尝试实验，最简单方法是登录 https://academy.apnic.net，在 Virtual Labs 中选择 OpenFlow Lab 即可。
+如果仅仅为了尝试实验，最简单方法是登录 https://academy.apnic.net ，在 Virtual Labs 中选择 OpenFlow Lab 即可。
 
 这里仅仅给出了使用虚拟机在本地进行实验的步骤。
 
