@@ -177,7 +177,7 @@ mininet> exit
 
 在ODL虚拟机中执行命令`ip addr`，显示网卡IP地址为y.y.y.y，从PC终端执行`ssh apnic@y.y.y.y`登录虚拟机，这样做是为了方便后续 copy-paste命令。
 
-按照以下步骤安装相应的软件：
+在ODL虚拟机中按照以下步骤安装相应的软件：
 
 ```
 1. 更新:
@@ -198,6 +198,7 @@ apnic@ubuntu:~$ source ~/.bashrc
 
 ## 六、安装和配置OpenDaylight控制器软件
 
+在ODL虚拟机中执行如下命令
 ```
 1. 下载并安装OpenDaylight:
 
@@ -222,7 +223,7 @@ The above command will take you to the OpenDaylight shell:
 ```
 3. 安装OpenDaylight 特性:
 
-opendaylight-user@root> feature:install odl-restconf odll2switch-switch odl-mdsal-apidocs odl-dlux-all
+opendaylight-user@root> feature:install odl-restconf odl-l2switch-switch odl-mdsal-apidocs odl-dlux-all
 
 OpenDaylight 特性需要按需启用，安装需要一些时间：
   odl-restconf: Enables the RESTCONF northbound API
@@ -244,4 +245,101 @@ opendaylight-user@root> feature:list --installed
 opendaylight-user@root> system:shutdown
 ```
 
+## 七、实验3: 简单的网络拓扑，使用OpenDaylight控制器
 
+在以上四的基础上，在mininet虚拟机中，改用OpenDaylight控制器，模拟生成如下的简单网络拓扑：
+
+![OpenFlow1](img/of5.png)
+
+```
+1. 启动 Wireshark 抓包软件，选择好网卡，抓取mininet虚拟机的流量
+
+2. Create a display filter within Wireshark for openflow_v4
+
+3. 创建一个简单的网络拓扑，使用OpenDaylight控制器
+
+mininet@mininet-vm:~$ sudo mn --mac --controller=remote,ip=y.y.y.y,port=6633 --switch ovs,protocols=OpenFlow13
+
+其中y.y.y.y是ODL虚拟机IP地址
+
+以上命令产生了包含如下内容的模拟网络：
+  1 个 交换机, s1
+  2 个 主机, h1 and h2
+  h1 eth0 连接到 s1 eth0
+  h2 eth0 连接到 s1 eth1
+  使用远程的OpenFlow控制器，IP是y.y.y.y
+ 
+运行以上命令后，提示符是：
+mininet>
+
+4. 查看flow table
+mininet> dpctl dump-flows --protocols=OpenFlow13
+
+注意：如果上述命令错误，请检查 sudo mn ... 命令，特别是最后的protocols=OpenFlow13是否正确
+
+5. 打开OpenDaylight GUI.
+浏览器访问 http://y.y.y.y:8181/index.html
+单击"reload"可以看到交换机
+
+6. 停止Wireshark抓包，查看mininet和控制器之间的 OpenFlow 通信。特别是 FLOW_MOD 消息与上述4 dump-flow对比。
+
+7. 重新启动 Wireshark 抓包
+
+8. 主机ping测试
+mininet> h1 ping h2 -c 4
+
+9. 查看flow table
+mininet> dpctl dump-flows --protocols=OpenFlow13
+
+请观察flow table是否有变化。
+
+10. 打开OpenDaylight GUI.
+浏览器访问 http://y.y.y.y:8181/index.html
+单击"reload"是否有变化
+
+11. 停止Wireshark抓包，查看mininet和控制器之间的 OpenFlow 通信。特别是 Packet-In 和 FLOW_MOD 消息。
+
+12. Exit from the Mininet CLI:
+mininet> exit
+
+13. 还可以生成不同的拓扑进行测试，命令行是：
+sudo mn --mac --topo=tree,3 --controller=remote,ip=y.y.y.y,port=6633 --switch ovs,protocols=OpenFlow13
+sudo mn --mac --topo=linear,4 --controller=remote,ip=y.y.y,port=6633 --switch ovs,protocols=OpenFlow13
+```
+
+
+## 八、OpenDaylight OpenFlow Manager (OFM) 安装、配置和运行
+
+在ODL虚拟机中，按照如下过程安装OFM。
+```
+1. 安装npm
+apnic@ubuntu:~$ sudo apt-get install -y  npm
+
+2. 安装grunt
+apnic@ubuntu:~$ sudo npm install -g grunt-cli
+
+3. 创建一个链接，否则会提示node找不到
+apnic@ubuntu:~$ sudo ln -s /usr/bin/nodejs /usr/bin/node
+
+4. 下载OFM代码
+apnic@ubuntu:~$ cd ~
+apnic@ubuntu:~$ git clone https://github.com/CiscoDevNet/OpenDaylight-Openflow-App.git
+
+5. 修改配置
+apnic@ubuntu:~$ cd OpenDaylight-Openflow-App/
+apnic@ubuntu:~/OpenDaylight-Openflow-App$ vi ofm/src/common/config/env.module.js
+
+将其中 baseURL: "http://localhost:" 中的localhost改为 y.y.y.y，即ODL虚拟机IP地址。
+如果修改过OpenDaylight登录名或密码，也请修改。
+
+6. 执行程序
+apnic@ubuntu:~/OpenDaylight-Openflow-App$ grunt
+Running "connect:def" (connect) task
+Waiting forever...
+Started connect web server on http://localhost:9000
+
+7. 访问界面
+浏览器访问 http://y.y.y.y:9000 就可以看到界面
+
+界面中可以看到交换机、主机等设备，可以对flow table进行修改。
+```
