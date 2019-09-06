@@ -22,7 +22,7 @@ OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机�
 
 虚拟化环境，最简单是安装VirtualBox。
 
-下载2个虚拟机镜像：mininet-vm.ova 和 ubuntu.ova。
+下载2个虚拟机镜像：[mininet-vm.ova](http://ipv6.ustc.edu.cn/ova/mininet-vm.ova) 和 [ubuntu.ova](http://ipv6.ustc.edu.cn/ova/ubuntu.ova)。
 
 ## 二、mininet 准备
 
