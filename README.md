@@ -2,9 +2,7 @@
 
 本实验来自 https://wiki.apnictraining.net/apnic48-sdn ，感谢 Paresh Khatri 和 Warren Finch 详尽的讲解。
 
-OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。
-
-控制器下发flow table规则到OpenFlow交换机，OpenFlow交换机依据规则实现数据包的转发过程。
+OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。控制器下发flow table规则到OpenFlow交换机，OpenFlow交换机依据规则实现数据包的转发过程。
 
 实验包含3 部分内容，运行在2个虚拟机内：
 
@@ -16,7 +14,7 @@ OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机�
 
 如果仅仅为了尝试实验，最简单方法是登录 https://academy.apnic.net ，在 Virtual Labs 中选择 OpenFlow Lab 即可。
 
-这里仅仅给出了使用虚拟机在本地进行实验的步骤。
+这里给出了使用虚拟机在本地进行实验的步骤。
 
 ## 一、准备
 
