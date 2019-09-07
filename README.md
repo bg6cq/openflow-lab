@@ -4,7 +4,7 @@
 
 本页面版权属于APNIC，这里仅仅是原英文版本的中文翻译。
 
-OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。
+OpenFlow的思路是把data plane（处理数据包转发，由openflow交换机承担）和control plane(控制data plane，由openflow控制器承担)功能分开。
 
 控制器下发flow table规则到OpenFlow交换机，OpenFlow交换机依据规则实现数据包的转发过程。
 
