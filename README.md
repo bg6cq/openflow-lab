@@ -1,12 +1,19 @@
-## OpenFlow 实验
+## OpenFlow 实验 step by step
 
 本实验来自 https://wiki.apnictraining.net/apnic48-sdn ，感谢 Paresh Khatri 和 Warren Finch 详尽的讲解。
 
-OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。控制器下发flow table规则到OpenFlow交换机，OpenFlow交换机依据规则实现数据包的转发过程。
+本页面版权属于APNIC，这里仅仅是原英文版本的中文翻译。
 
-实验包含3 部分内容，运行在2个虚拟机内：
+OpenFlow的思路是把data plan（处理数据包转发，由openflow交换机承担）和control plan(控制data plan，由openflow控制器承担)功能分开。
 
-1. 一个虚拟机名字为mininet，运行 mininet 模拟器，模拟openflow交换机和主机
+控制器下发flow table规则到OpenFlow交换机，OpenFlow交换机依据规则实现数据包的转发过程。
+
+本实验使用OpenDaylight控制器控制Open Vswitch交换机完成数据包转发，通过本实验可以了解OpenFlow交换机和OpenFlow控制器的交互过程，
+并可以使用OpenDaylight-Openflow-App (OFM) 修改openflow table，实现对数据包转发的控制。
+
+实验包含3部分内容，运行在2个虚拟机内：
+
+1. 一个虚拟机名字为mininet，运行 mininet 模拟器，模拟openflow交换机和若干主机
 
 2. Open Daylight 控制器，运行在一个虚拟机(名字为ODL)内，提供 openflow 控制器功能
 
@@ -71,7 +78,7 @@ completed in 2.700 seconds
 
 在以上二的基础上，模拟生成如下的简单网络拓扑：
 
-![OpenFlow1](img/of1.png)
+![OpenFlow1](img/of1.jpg)
 
 ```
 1. 创建一个简单的网络拓扑
@@ -115,7 +122,7 @@ mininet> exit
 
 在以上三的基础上，增加默认的OpenFlow控制器，模拟生成如下的简单网络拓扑：
 
-![OpenFlow1](img/of2.png)
+![OpenFlow1](img/of2.jpg)
 
 ```
 1. 创建一个简单的网络拓扑，使用默认的OpenFlow控制器
@@ -216,7 +223,7 @@ apnic@ubuntu:~$ cd distribution-karaf-0.5.4-Boron-SR4
 apnic@ubuntu:~$ ./bin/karaf
 The above command will take you to the OpenDaylight shell:
 ```
-![ODL](img/of3.png)
+![ODL](img/of3.jpg)
 
 ```
 3. 安装OpenDaylight 特性:
@@ -236,7 +243,7 @@ opendaylight-user@root> feature:list --installed
 
 访问 http://y.y.y.y:8181/index.html （y.y.y.y是ODL虚拟机的IP地址）能看到如下的登录界面，使用admin/admin登录。
 ```
-![ODL](img/of4.png)
+![ODL](img/of4.jpg)
 
 ```
 5. 如果要退出ODL，可以使用如下命令：
@@ -247,7 +254,7 @@ opendaylight-user@root> system:shutdown
 
 在以上四的基础上，在mininet虚拟机中，改用OpenDaylight控制器，模拟生成如下的简单网络拓扑：
 
-![OpenFlow1](img/of5.png)
+![OpenFlow1](img/of5.jpg)
 
 ```
 1. 启动 Wireshark 抓包软件，选择好网卡，抓取mininet虚拟机的流量
