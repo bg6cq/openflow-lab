@@ -312,6 +312,10 @@ sudo mn --mac --topo=tree,3 --controller=remote,ip=y.y.y.y,port=6633 --switch ov
 sudo mn --mac --topo=linear,4 --controller=remote,ip=y.y.y,port=6633 --switch ovs,protocols=OpenFlow13
 ```
 
+下图是使用--topo=tree,3 生成的拓扑图。
+
+![OF6](img/of6.jpg)
+
 
 ## 八、OpenDaylight OpenFlow Manager (OFM) 安装、配置和运行
 
@@ -348,3 +352,16 @@ Started connect web server on http://localhost:9000
 
 界面中可以看到交换机、主机等设备，可以对flow table进行修改。
 ```
+
+下图是一个OFM显示的拓扑图
+
+![OF7](img/of7.jpg)
+
+下图是一个OFM显示的flow table
+
+![OF8](img/of8.jpg)
+
+下图是一个OFM显示的flow table 规则
+
+![OF9](img/of9.jpg)
+
